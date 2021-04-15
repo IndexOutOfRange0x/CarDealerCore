@@ -20,21 +20,54 @@ namespace CarDealerCore.Controllers
         {
             return View();
         }
-        public IActionResult AddCar(string vin, string mark, string model, string description, decimal price)
+        [HttpPost]
+        public async Task<IActionResult> AddCar(Car car)
         {
-            Car car = new Car()
-            {
-                VIN = vin,
-                Mark = mark,
-                Model = model,
-                Description = description,
-                IsSold = false,
-                Price = price
-            };
-
             db.Cars.Add(car);
+            await db.SaveChangesAsync();
+            return Redirect("~/Cars/ShowAllCars");
+        }
+        public async Task<IActionResult> EditCarPage(int? id)
+        {
+            if (id != null)
+            {
+                Car car = await db.Cars.FirstOrDefaultAsync(p => p.Id == id);
+                if (car != null)
+                    return View(car);
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditCar(Car car)
+        {
+            db.Cars.Update(car);
+            await db.SaveChangesAsync();
+            return Redirect("~/Cars/ShowAllCars");
+        }
+        [HttpGet]
+        [ActionName("DeleteCar")]
+        public async Task<IActionResult> ConfirmDelete(int? id)
+        {
+            if (id != null)
+            {
+                Car car = await db.Cars.FirstOrDefaultAsync(p => p.Id == id);
+                if (car != null)
+                    return View(car);
+            }
+            return NotFound();
+        }
 
-            return Redirect("~/Home/Index");
+        [HttpPost]
+        public async Task<IActionResult> DeleteCar(int? id)
+        {
+            if (id != null)
+            {
+                Car car = new Car { Id = id.Value };
+                db.Entry(car).State = EntityState.Deleted;
+                await db.SaveChangesAsync();
+                return Redirect("~/Cars/ShowAllCars");
+            }
+            return NotFound();
         }
     }
 }
