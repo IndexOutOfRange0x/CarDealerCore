@@ -1,0 +1,21 @@
+﻿@model IEnumerable<CarDealerCore.Models.Admin>
+@{
+    Layout = "/Views/Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/table.css" />
+<table class="table_dark">
+    <tr>
+        <td>ID</td>
+        <td>Login</td>
+        <td>Password</td>>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Login</td>
+            <td>@item.Password</td>
+        </tr>
+    }
+</table>

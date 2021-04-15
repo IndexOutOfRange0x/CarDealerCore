@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +8,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarDealerCore.Controllers
 {
-    public class HomeController : Controller
+    public class AdminsController : Controller
     {
         private ApplicationContext db;
-        public HomeController(ApplicationContext context)
+        public AdminsController(ApplicationContext context)
         {
             db = context;
         }
-
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> ShowAllAdmins()
         {
-            return View(await db.Sales.ToListAsync());
+            return View(await db.Admins.ToListAsync());
         }
-
     }
 }

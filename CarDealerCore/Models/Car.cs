@@ -8,10 +8,12 @@ namespace CarDealerCore.Models
     public class Car
     {
         public int Id { get; set; }
+        public string VIN { get; set; }
         public string Mark { get; set; }
         public string Model { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
         public bool IsSold { get; set; }
+        public Sale Sale { get; set; }
     }
 }

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<CarDealerCore.Models.Car>
+@{
+    Layout = "/Views/Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/table.css" />
+<table class="table_dark">
+    <tr>
+        <td>ID</td>
+        <td>Mark</td>
+        <td>Model</td>>
+        <td>Description</td>>
+        <td>Price</td>>
+        <td>IsSold</td>>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Mark</td>
+            <td>@item.Model</td>
+            <td>@item.Description</td>
+            <td>@item.Price</td>
+            <td>@item.IsSold</td>
+        </tr>
+    }
+</table>

@@ -1,26 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using CarDealerCore.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarDealerCore.Controllers
 {
-    public class HomeController : Controller
+    public class SalesController : Controller
     {
         private ApplicationContext db;
-        public HomeController(ApplicationContext context)
+        public SalesController(ApplicationContext context)
         {
             db = context;
         }
-
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> ShowAllSales()
         {
             return View(await db.Sales.ToListAsync());
         }
-
     }
 }
