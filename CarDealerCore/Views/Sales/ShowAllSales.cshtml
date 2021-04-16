@@ -8,19 +8,22 @@
     <tr>
         <td>ID</td>
         <td>Buyer</td>
-        <td>Car</td>>
-        <td>Date of sale</td>>
-        <td>Status</td>>
+        <td>Car</td>
+        <td>Date of sale</td>
+        <td>Status</td>
+        <td>Edit</td>
+        <td>Delete</td>
     </tr>
     @foreach (var item in Model)
     {
-        <tr>
-            <td>@item.Id</td>
-            <td>@item.UserId</td>
-            <td>@item.CarId</td>
-            <td>@item.Date_Sold</td>
-            <td>@item.Status</td>
-
-        </tr>
+<tr>
+    <td>@item.Id</td>
+    <td>@item.UserId</td>
+    <td>@item.CarId</td>
+    <td>@item.Date_Sold</td>
+    <td>@item.Status</td>
+    <td><a asp-area="" asp-controller="Sales" asp-action="EditSalesPage" asp-route-id="@item.Id">Edit</a></td>
+    <td><a asp-area="" asp-controller="Sales" asp-action="DeleteSale" asp-route-id="@item.Id">Delete</a></td>
+</tr>
     }
 </table>

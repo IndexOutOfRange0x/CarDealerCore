@@ -1,0 +1,36 @@
+﻿@model CarDealerCore.Models.Sale
+@{
+    Layout = "/Views/Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/field.css" />
+<link rel="stylesheet" href="~/css/table.css" />
+
+<div>
+    <table class="table_dark">
+        <tr>
+            <td>UserId</td>
+            <td>CarId</td>
+            <td>Date_Sold</td>
+            <td>Status</td>
+            <td>Delete</td>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.UserId)
+            </td>
+            <td>@Html.DisplayFor(model => model.CarId)</td>
+            <td>@Html.DisplayFor(model => model.Date_Sold)</td>
+            <td>@Html.DisplayFor(model => model.Status)</td>
+            <td>
+                <div>
+                    <form asp-controller="Sales" asp-action="DeleteSale" method="post">
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-default" value="Удалить" />
+                        </div>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

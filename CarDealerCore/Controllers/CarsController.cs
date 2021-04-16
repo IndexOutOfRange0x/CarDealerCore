@@ -16,6 +16,7 @@ namespace CarDealerCore.Controllers
         {
             return View(await db.Cars.ToListAsync());
         }
+        [HttpGet]
         public IActionResult AddCarPage()
         {
             return View();

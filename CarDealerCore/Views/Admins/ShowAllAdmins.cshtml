@@ -8,7 +8,9 @@
     <tr>
         <td>ID</td>
         <td>Login</td>
-        <td>Password</td>>
+        <td>Password</td>
+        <td>Edit</td>
+        <td>Delete</td>
     </tr>
     @foreach (var item in Model)
     {
@@ -16,6 +18,8 @@
             <td>@item.Id</td>
             <td>@item.Login</td>
             <td>@item.Password</td>
+            <td><a asp-area="" asp-controller="Admins" asp-action="EditAdminPage" asp-route-id="@item.Id">Edit</a></td>
+            <td><a asp-area="" asp-controller="Admins" asp-action="DeleteAdmin" asp-route-id="@item.Id">Delete</a></td>
         </tr>
     }
 </table>
