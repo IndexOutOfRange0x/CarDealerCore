@@ -14,6 +14,6 @@ namespace CarDealerCore.Models
         public string Description { get; set; }
         public decimal Price { get; set; }
         public bool IsSold { get; set; }
-        public Sale Sale { get; set; }
+        public virtual Sale Sale { get; set; }
     }
 }

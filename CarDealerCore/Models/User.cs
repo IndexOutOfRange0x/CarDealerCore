@@ -10,6 +10,6 @@ namespace CarDealerCore.Models
         public int Id { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
-        public List<Sale> Sale { get; set; } = new List<Sale>();
+        public virtual List<Sale> Sale { get; set; } = new List<Sale>();
     }
 }

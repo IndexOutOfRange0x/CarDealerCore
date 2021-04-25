@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using CarDealerCore.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CarDealerCore.Controllers
 {
@@ -14,7 +15,9 @@ namespace CarDealerCore.Controllers
         }
         public async Task<IActionResult> ShowAllCars()
         {
-            return View(await db.Cars.ToListAsync());
+            return View(await db.Cars
+                //.Where(Car => Car.IsSold == false)
+                .ToListAsync());
         }
         [HttpGet]
         public IActionResult AddCarPage()

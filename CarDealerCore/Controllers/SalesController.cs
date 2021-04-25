@@ -19,11 +19,21 @@ namespace CarDealerCore.Controllers
         [HttpGet]
         public IActionResult AddSalePage()
         {
+
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> AddSale(Sale sale)
         {
+            if (sale.Date_Sold == System.DateTime.Parse("01/01/0001") || sale.Date_Sold > System.DateTime.Now)
+                sale.Date_Sold = System.DateTime.Now;
+            
+            Car car = db.Cars.Find(sale.CarId);
+            if (car is null ||  car.IsSold || db.Users.Find(sale.UserId) is null) 
+                return NotFound();
+            car.IsSold = true;
+            db.Cars.Update(car);
+            
             db.Sales.Add(sale);
             await db.SaveChangesAsync();
             return Redirect("~/Sales/ShowAllSales");
