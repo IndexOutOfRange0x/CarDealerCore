@@ -11,4 +11,30 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Admins\AddAdminPage.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Admins\DeleteAdmin.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Admins\EditAdminPage.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Admins\ShowAllAdmins.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Cars\AddCarPage.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Cars\DeleteCar.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Cars\EditCarPage.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Cars\ShowAllCars.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Home\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Sales\AddSalePage.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Sales\DeleteSale.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Sales\EditSalesPage.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Sales\ShowAllSales.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_header.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Shared\_Layout.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Users\AddUserPage.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Users\DeleteUser.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Users\EditUserPage.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Users\ShowAllUsers.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views" />
+  </ItemGroup>
+
 </Project>

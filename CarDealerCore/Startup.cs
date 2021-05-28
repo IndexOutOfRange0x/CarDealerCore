@@ -24,8 +24,7 @@ namespace CarDealerCore
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            // добавляем контекст ApplicationContext в качестве сервиса в приложение
-            services.AddDbContext<ApplicationContext>(options => options.UseLazyLoadingProxies()
+services.AddDbContext<ApplicationContext>(options => options.UseLazyLoadingProxies()
                                                                         .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
         }
