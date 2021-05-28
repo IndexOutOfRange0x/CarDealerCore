@@ -1,0 +1,29 @@
+﻿@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h1 class="text-danger">Ошибка.</h1>
+<h2 class="text-danger">Произошла ошибка при обработке вашего запроса.</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>ID запроса:</strong> <code>@Model.RequestId</code>
+    </p>
+    <p>
+        <strong>HTTP код ошибки:</strong> <code>@ViewData["statusCode"]</code>
+    </p>
+}
+
+<h3>Режим разработки</h3>
+<p>
+    При переходе в режим <strong>разработки</strong> будет отображаться более подробная информация о произошедшей ошибке.
+</p>
+<p>
+    <strong>Режим разработки не должен быть включен для развернутых приложений.</strong>
+    Это может привести к отображению конфиденциальной информации от исключений для конечных пользователей.
+    Для локальной отладки включите режим <strong>разработки</strong> задав для переменной среды 
+    <strong>ASPNETCORE_ENVIRONMENT</strong> значение <strong>Development</strong>
+    и перезапустите приложение.
+</p>

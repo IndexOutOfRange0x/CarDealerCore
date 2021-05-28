@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "Добавить автомобиль";
+}
+
+<div class="about-section">
+        <h1>@ViewData["Title"]</h1>
+        <p>Добавить новый автомобиль в каталог.</p>
+    </div>
+
+<div class="form-group mt-3" style="max-width: 400px">
+    <form method="post" >
+        <div class="form-group">
+            <input type="text" class="form-control" 
+                   name="text" placeholder="VIN-номер" />
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="tag" placeholder="Марка" />
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="tag" placeholder="Модель" />
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="tag" placeholder="Описание" />
+        </div>
+        <div class="form-group">
+            <input type="number" class="form-control" name="tag" placeholder="Цена" />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Добавить</button>
+        </div>
+    </form>
+</div>
