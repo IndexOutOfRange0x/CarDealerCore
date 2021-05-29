@@ -1,0 +1,30 @@
+@model Car
+@{
+    ViewData["Title"] = Model.Mark + " " + Model.Model;
+}
+<div class="container my-5">
+    <div class="row">
+        <div class="col">
+            <h2 class="text-left">@Model.Mark @Model.Model</h2>
+        </div>
+        <div class="col">
+            <h2 class="text-right">@(Convert.ToInt32(Model.Price)) &#8381;</h2>
+        </div>
+    </div>
+    <div class="row my-3">
+        
+    </div>
+    <div class="row my-3">
+        <h2>Описание</h2>
+    </div>
+    <div class="row">
+        @Html.Raw(Model.Description)
+        @*@HtmlHelper.Raw(Model.Description)*@
+        @*<span>@Model.Description</span>*@
+    </div>
+    <div class="row">
+        <form method="post" asp-action="Buy">
+        <button type="submit" class="btn btn-primary">Купить</button>
+        </form>
+    </div>
+</div>

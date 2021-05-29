@@ -1,34 +1,19 @@
 ﻿@{
     ViewData["Title"] = "Главная";
+    List<Car> cars= ViewBag.Cars;
 }
 
-@*
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>*@
-
-<div class="card my-3">
-    <div class="card-body">
-        @*<img src="https://top10a.ru/wp-content/uploads/2019/09/6-47.jpg" align="left" height="200" class="px-3"/>*@
-        <h5 class="card-title">Марка модель</h5>
-        <p class="card-text">Описание автомобиля со всеми вытекающими</p>
-        <a class="btn btn-primary" asp-controller="Home" asp-action="Car">(цена автомобиля) &#8381;</a>
+@foreach(var car in cars)
+{
+    <div class="card my-3">
+        <div class="card-body">
+            <h5 class="card-title">@car.Mark @car.Model</h5>
+            @*<span class="card-text">@car.Description</span>*@
+            <a class="btn btn-primary"
+               asp-controller="Car"
+               asp-action="GetCar" asp-route-id=@car.Id>
+                @(Convert.ToInt32(car.Price)) &#8381;
+            </a>
+        </div>
     </div>
-</div>
-<div class="card my-3">
-    <div class="card-body">
-        @*<img src="https://top10a.ru/wp-content/uploads/2019/09/6-47.jpg" align="left" height="200" class="px-3"/>*@
-        <h5 class="card-title">Марка модель</h5>
-        <p class="card-text">Описание автомобиля со всеми вытекающими</p>
-        <a class="btn btn-primary" asp-controller="Home" asp-action="Car">(цена автомобиля) &#8381;</a>
-    </div>
-</div>
-<div class="card my-3">
-    <div class="card-body">
-        @*<img src="https://top10a.ru/wp-content/uploads/2019/09/6-47.jpg" align="left" height="200" class="px-3"/>*@
-        <h5 class="card-title">Марка модель</h5>
-        <p class="card-text">Описание автомобиля со всеми вытекающими</p>
-        <a class="btn btn-primary" asp-controller="Home" asp-action="Car">(цена автомобиля) &#8381;</a>
-    </div>
-</div>
+    }

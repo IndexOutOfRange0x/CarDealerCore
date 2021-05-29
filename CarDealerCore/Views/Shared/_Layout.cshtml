@@ -23,16 +23,16 @@
                     <a class="nav-link" asp-controller="Home" asp-action="Index">Главная</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="MySales">Мои покупки</a>
+                    <a class="nav-link" asp-controller="Sale" asp-action="MySales">Мои покупки</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="AllSales">Все покупки</a>
+                    <a class="nav-link" asp-controller="Sale" asp-action="AllSales">Все покупки</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="UserPage">Моя страница</a>
+                    <a class="nav-link" asp-controller="Account" asp-action="UserPage">Моя страница</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="AddCar">Добавить авто</a>
+                    <a class="nav-link" asp-controller="Car" asp-action="AddCar">Добавить авто</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Home" asp-action="Privacy">О нас</a>
@@ -42,9 +42,7 @@
             <div class="navbar-text mr-3">
                 Пользователь/Пожалуйста, авторизуйтесь
             </div>
-            <form method="post" asp-action="Login">
-                <button class="btn btn-primary" type="submit">Войти/Выйти</button>
-            </form>
+            <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Войти/Выйти</a>
             
         </div>
     </nav>

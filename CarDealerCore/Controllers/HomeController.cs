@@ -1,63 +1,33 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CarDealerCore.Models;
+using CarDealerCore.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarDealerCore.Controllers
 {
     public class HomeController : Controller
     {
-    
+        private ApplicationContext _db;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationContext context)
         {
+            _db = context;
             _logger = logger;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ViewBag.Cars = await _db.Cars.Where(X => X.IsSold == false).ToListAsync();
             return View();
         }
-        
-        public IActionResult Car()
-        {
-            return View();
-        }
-    
-        public IActionResult MySales()
-        {
-            return View();
-        }
-        
-        public IActionResult AllSales()
-        {
-            return View();
-        }
-    
-        public IActionResult UserPage()
-        {
-            return View();
-        }
-        
+      
         public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        public IActionResult AddCar()
-        {
-            return View();
-        }
-        
-        [HttpPost]
-        public IActionResult Buy()
-        {
-            return RedirectToAction("MySales");
-        }
-        
-        [HttpPost]
-        public IActionResult Login()
         {
             return View();
         }
