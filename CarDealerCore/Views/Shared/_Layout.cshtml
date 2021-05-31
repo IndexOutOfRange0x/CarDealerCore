@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<User> _signInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -40,9 +42,15 @@
             </ul>
 
             <div class="navbar-text mr-3">
-                Пользователь/Пожалуйста, авторизуйтесь
+                @if(User.Identity.IsAuthenticated){ @User.Identity.Name } else { <text>Пожалуйста, авторизуйтесь</text> }
             </div>
-            <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Войти/Выйти</a>
+            @if (User.Identity.IsAuthenticated) {
+                <form method="post" asp-controller="Account" asp-action="Logout">
+                    <input class="btn btn-primary" type="submit" value="Выйти"/>
+                </form>
+            } else {
+                <a class="btn btn-primary" asp-controller="Account" asp-action="Login">Войти</a>
+            }
             
         </div>
     </nav>

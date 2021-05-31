@@ -10,6 +10,7 @@
             <h4>Вход</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="ReturnUrl"/>
             <div class="form-group">
                 <label asp-for="Login"></label>
                 <input asp-for="Login" class="form-control" />

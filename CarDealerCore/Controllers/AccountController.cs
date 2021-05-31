@@ -5,6 +5,7 @@ using CarDealerCore.ViewModels;
 using CarDealerCore.Data;
 using CarDealerCore.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -14,12 +15,21 @@ namespace CarDealerCore.Controllers
     public class AccountController : Controller
     {
         private ApplicationContext _db;
-        private readonly ILogger<AccountController> _logger;
-
-        public AccountController(ApplicationContext context, ILogger<AccountController> logger)
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private RoleManager<IdentityRole> _roleManager;
+        
+        
+        public AccountController(
+            ApplicationContext context, 
+            UserManager<User> userManager, 
+            SignInManager<User> signInManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _db = context;
-            _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _roleManager = roleManager;
         }
         
         public IActionResult UserPage()
@@ -34,39 +44,61 @@ namespace CarDealerCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(model);
+                var result = 
+                    await _signInManager.PasswordSignInAsync(
+                        model.Login, model.Password, false ,false);
+                if (result.Succeeded)
+                {
+                    // проверяем, принадлежит ли URL приложению
+                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+                    else
+                    {
+                        return LocalRedirect("~/Home/Index?handler=SetIdentity");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                }
             }
-            
-            User user = await _db.Users
-                .FirstOrDefaultAsync(X => 
-                    X.Login == model.Login && X.Password == model.Password);
-            Admin admin = await _db.Admins
-                .FirstOrDefaultAsync(X => 
-                    X.Login == model.Login && X.Password == model.Password);
-            var claims = new List<Claim>
+            return View(model);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> LogOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public async Task Register(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
             {
-                new Claim(ClaimTypes.Name, model.Login)
-            };
-            if (user != null)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, "User"));
+                User user = new User {UserName = model.Login};
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, false);
+                    await _userManager.AddToRoleAsync(user, "User");
+                    return;//RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
             }
-            else if (admin != null)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-            }
-            else
-            {
-                ModelState.AddModelError("", "User not found");
-                return View(model);
-            }
-            await HttpContext.SignInAsync("Cookie", 
-                    new ClaimsPrincipal(
-                    new ClaimsIdentity(claims, "Cookie")));
-            
-            return View();
+
+            return; // View(model);
         }
     }
 }

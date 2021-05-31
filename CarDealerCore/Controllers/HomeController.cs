@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CarDealerCore.Models;
 using CarDealerCore.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarDealerCore.Controllers
@@ -13,12 +15,11 @@ namespace CarDealerCore.Controllers
     public class HomeController : Controller
     {
         private ApplicationContext _db;
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationContext context)
+        public HomeController(
+            ApplicationContext context) 
         {
             _db = context;
-            _logger = logger;
         }
         
         public async Task<IActionResult> Index()

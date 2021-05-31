@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using CarDealerCore.Data;
+using CarDealerCore.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace CarDealerCore
 {
@@ -25,6 +28,17 @@ namespace CarDealerCore
                 options => options.UseLazyLoadingProxies()
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
+            
+            services.AddIdentity<User, IdentityRole>(config =>
+                {
+                    config.Password.RequireDigit = false;
+                    config.Password.RequireLowercase = false;
+                    config.Password.RequireNonAlphanumeric = false;
+                    config.Password.RequireUppercase = false;
+                    config.Password.RequiredLength = 6;
+                })
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
             
             services.AddAuthentication("Cookie")
                 .AddCookie("Cookie", config =>
@@ -47,8 +61,8 @@ namespace CarDealerCore
 
             });
             
-            
-            
+            services.AddLogging();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllersWithViews();
         }
         
