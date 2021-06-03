@@ -19,7 +19,6 @@ namespace CarDealerCore.Controllers
         private readonly SignInManager<User> _signInManager;
         private RoleManager<IdentityRole> _roleManager;
         
-        
         public AccountController(
             ApplicationContext context, 
             UserManager<User> userManager, 
@@ -36,8 +35,13 @@ namespace CarDealerCore.Controllers
         {
             return View();
         }
+
+        public IActionResult Register(string ReturnUrl)
+        {
+            return View();
+        }
         
-        public IActionResult Login()
+        public IActionResult Login(string ReturnUrl)
         {
             return View();
         }
@@ -52,14 +56,14 @@ namespace CarDealerCore.Controllers
                 if (result.Succeeded)
                 {
                     // проверяем, принадлежит ли URL приложению
-                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    {
-                        return Redirect(model.ReturnUrl);
-                    }
-                    else
-                    {
-                        return LocalRedirect("~/Home/Index?handler=SetIdentity");
-                    }
+                    // if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    // {
+                         return Redirect(model.ReturnUrl);
+                    // }
+                    // else
+                    // {
+                    //     return LocalRedirect("~/Home/Index?handler=SetIdentity");
+                    // }
                 }
                 else
                 {
@@ -77,17 +81,20 @@ namespace CarDealerCore.Controllers
         }
 
         [HttpPost]
-        public async Task Register(LoginViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
+                //User curr = await _db.Users.FirstOrDefaultAsync(x => x.UserName == model.Login);
+                
                 User user = new User {UserName = model.Login};
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, false);
                     await _userManager.AddToRoleAsync(user, "User");
-                    return;//RedirectToAction("Index", "Home");
+                    await _signInManager.PasswordSignInAsync(
+                        model.Login, model.Password, false ,false);
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -98,7 +105,7 @@ namespace CarDealerCore.Controllers
                 }
             }
 
-            return; // View(model);
+            return View(model);
         }
     }
 }

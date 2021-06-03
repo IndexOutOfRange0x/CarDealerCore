@@ -45,6 +45,7 @@ namespace CarDealerCore
                 {
                     config.LoginPath = "/Account/Login";
                     config.AccessDeniedPath = "/Home/Error?code=401";
+                    config.ReturnUrlParameter = "ReturnUrl";
                 });
 
             services.AddAuthorization(options =>

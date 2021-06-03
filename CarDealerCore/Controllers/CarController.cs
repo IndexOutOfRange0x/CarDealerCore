@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
 using CarDealerCore.Data;
+using CarDealerCore.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace CarDealerCore.Controllers
@@ -25,9 +27,23 @@ namespace CarDealerCore.Controllers
         {
             return RedirectToAction("MySales", "Sale");
         }
+
         public IActionResult AddCar()
         {
             return View();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddCar(Car car)
+        {
+            
+            Car c = await _db.Cars.FirstOrDefaultAsync(x => x.VIN == car.VIN);
+            if (c == null)
+            {
+                _db.Cars.Add(car);
+                await _db.SaveChangesAsync();
+            }
+            return RedirectToAction("Index", "Home");
         }
         
         [HttpPost]

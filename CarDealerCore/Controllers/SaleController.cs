@@ -6,6 +6,7 @@ namespace CarDealerCore.Controllers
     public class SaleController : Controller
     {
         // GET
+        [Authorize(Policy = "User")]
         public IActionResult MySales()
         {
             return View();
