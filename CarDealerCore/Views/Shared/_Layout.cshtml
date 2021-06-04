@@ -1,4 +1,6 @@
-﻿@inject Microsoft.AspNetCore.Identity.SignInManager<User> _signInManager
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> _signInManager
+@inject RoleManager<IdentityRole> _roleManager
 
 <!DOCTYPE html>
 <html lang="ru">
@@ -6,7 +8,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css"/>
     <link rel="stylesheet" href="~/css/site.css"/>
 </head>
 <body>
@@ -24,18 +26,28 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Home" asp-action="Index">Главная</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Sale" asp-action="MySales">Мои покупки</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Sale" asp-action="AllSales">Все покупки</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Account" asp-action="UserPage">Моя страница</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Car" asp-action="AddCar">Добавить авто</a>
-                </li>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @if (User.IsInRole("User"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Sale" asp-action="MySales">Мои покупки</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="UserPage">Сменить пароль</a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Sale" asp-action="AllSales">Все покупки</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Car" asp-action="AddCar">Добавить авто</a>
+                        </li>
+                    }
+                }
+                
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Home" asp-action="Privacy">О нас</a>
                 </li>
@@ -68,8 +80,10 @@
         <a asp-controller="Home" asp-action="Privacy">О нас</a>
     </div>
 </footer>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="~/lib/jquery/dist/jquery-3.6.0.min.js"></script>
+<script src="~/lib/popper/dist/popper.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

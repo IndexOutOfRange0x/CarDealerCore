@@ -14,5 +14,17 @@ namespace CarDealerCore.Models
         public virtual Car Car { get; set; }
         public DateTime Date_Sold { get; set; }
         public string Status { get; set; }
+
+        public Sale()
+        {
+        }
+
+        public Sale(string userId, int carId, DateTime dateSold, string status)
+        {
+            UserId = userId;
+            CarId = carId;
+            Date_Sold = dateSold;
+            Status = status;
+        }
     }
 }

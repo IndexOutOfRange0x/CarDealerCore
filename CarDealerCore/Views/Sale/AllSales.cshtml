@@ -1,17 +1,31 @@
+@model IEnumerable<Sale>
 @{
     ViewData["Title"] = "Страница админа";
 }
+
+
 
 <div class="container-fluid">
   <div class="row">
     <main role="main" class="col">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Статистика продаж</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-            <span data-feather="calendar"></span>
-            Текущая неделя
+        <h1 class="h2">Статистика продаж на @ViewBag.Year год</h1>
+        
+        <div class="btn-group">
+          <a type="button" class="btn btn-secondary"asp-controller="Sale" 
+             asp-action="AllSales" asp-route-Year="@DateTime.Now.Year">Текущий год</a>
+          <button type="button" 
+                  class="btn btn-secondary dropdown-toggle dropdown-toggle-split" 
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="sr-only">Toggle Dropdown</span>
           </button>
+          <div class="dropdown-menu">
+            @for (int i = 2017; i < DateTime.Now.Year; ++i)
+            {
+              <a class="dropdown-item" asp-controller="Sale" asp-action="AllSales"
+                 asp-route-Year="@i">@i год</a>
+            }
+          </div>
         </div>
       </div>
         
@@ -27,23 +41,31 @@
             <th>Покупатель</th>
             <th>Дата покупки</th>
             <th>Статус</th>
+            <th>Действие</th>
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>1</td>
-            <td>Lexus LX 570</td>
-            <td>Зубенко Михаил Петрович</td>
-            <td>11.05.2021</td>
-            <td>Внес задаток, едет из Мурманска</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Subaru Impreza WRX STI</td>
-            <td>Giovanni Giorgio Armani</td>
-            <td>01.05.2021</td>
-            <td>ДКП составлено, идет постановка на учет</td>
-          </tr>
+          @foreach (Sale sale in Model)
+          {
+            <tr>
+              <td>@sale.Id</td>
+              <td>@sale.Car.Mark @sale.Car.Model</td>
+              <td>@sale.User.UserName</td>
+              <td>@sale.Date_Sold</td>
+              <td>@sale.Status</td>
+              <td>
+                @if (sale.Status == "Выполняется")
+                {
+                  <a asp-controller="Sale" asp-action="ChangeStatus" asp-route-id="@sale.Id" 
+                     class="btn btn-primary">Выполнить</a>
+                }
+                else
+                {
+                  @(new string("Выполнено"))
+                }
+              </td>
+            </tr>
+          }
           </tbody>
         </table>
       </div>
@@ -57,6 +79,12 @@
 <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 <script type="text/javascript">
+$('.dropdown-toggle').dropdown()
+</script>
+@{
+  Dictionary<int, decimal> proceed = ViewBag.sales;
+}
+<script type="text/javascript">
 (function () {
   'use strict'
   feather.replace()
@@ -67,23 +95,25 @@
     type: 'line',
     data: {
       labels: [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday'
+        'Январь',
+        'Февраль',
+        'Март',
+        'Апрель',
+        'Май',
+        'Июнь',
+        'Июль',
+        'Август',
+        'Сентябрь',
+        'Ноябрь',
+        'Декабрь'
       ],
       datasets: [{
         data: [
-          15339,
-          21345,
-          18483,
-          24003,
-          23489,
-          24092,
-          12034
+          @for (int i = 1; i < 12; ++i)
+          {
+            @((int)proceed[i]+", ")
+          }      
+          @proceed[12]
         ],
         lineTension: 0,
         backgroundColor: 'transparent',

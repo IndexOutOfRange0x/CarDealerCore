@@ -1,16 +1,20 @@
+@model IEnumerable<Sale>
 @{
     ViewData["Title"] = "Мои покупки";
 }
 <div class="container my-5">
     <h2>Мои сделки по покупке авто в Jarik Stoi</h2>
+    @foreach (Sale sale in Model)
+    {
     <div class="card my-3">
         <div class="card-body">
             @*<img src="https://top10a.ru/wp-content/uploads/2019/09/6-47.jpg" align="left" height="200" class="px-3"/>*@
-            <h5 class="card-title">Марка модель</h5>
-            <p class="card-text">Описание автомобиля со всеми вытекающими</p>
-            <p class="card-text">цена &#8381;</p>
-            <p class="card-text">29.04.2021</p>
-            <p class="card-text">Статус</p>
+            <h5 class="card-title">@sale.Car.Mark @sale.Car.Model</h5>
+            <p class="card-text">@sale.Car.Description</p>
+            <p class="card-text">@sale.Car.Price &#8381;</p>
+            <p class="card-text">@sale.Date_Sold</p>
+            <p class="card-text">@sale.Status</p>
         </div>
     </div>
+    }
 </div>

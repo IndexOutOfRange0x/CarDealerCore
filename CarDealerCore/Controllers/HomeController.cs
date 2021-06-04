@@ -15,7 +15,7 @@ namespace CarDealerCore.Controllers
     public class HomeController : Controller
     {
         private ApplicationContext _db;
-
+        
         public HomeController(
             ApplicationContext context) 
         {
@@ -24,6 +24,7 @@ namespace CarDealerCore.Controllers
         
         public async Task<IActionResult> Index()
         {
+            
             ViewBag.Cars = await _db.Cars.Where(X => X.IsSold == false).ToListAsync();
             return View();
         }

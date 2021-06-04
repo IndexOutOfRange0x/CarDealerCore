@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Security.Claims;
+﻿using System;
 using System.Threading.Tasks;
 using CarDealerCore.ViewModels;
 using CarDealerCore.Data;
 using CarDealerCore.Models;
-using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace CarDealerCore.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private ApplicationContext _db;
@@ -31,21 +30,32 @@ namespace CarDealerCore.Controllers
             _roleManager = roleManager;
         }
         
-        public IActionResult UserPage()
+        public async Task<IActionResult> UserPage()
         {
-            return View();
+            User user = await _db.Users.FirstOrDefaultAsync(x => 
+                x.UserName == HttpContext.User.Identity.Name);
+            
+            ChangePasswordViewModel changePasswordViewModel = 
+                new ChangePasswordViewModel(user.Id, user.UserName);
+            
+            return View(changePasswordViewModel);
         }
 
-        public IActionResult Register(string ReturnUrl)
+        [AllowAnonymous]
+        public IActionResult Register()
         {
             return View();
         }
         
+        [AllowAnonymous]
         public IActionResult Login(string ReturnUrl)
         {
             return View();
         }
+        
+        
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -56,14 +66,14 @@ namespace CarDealerCore.Controllers
                 if (result.Succeeded)
                 {
                     // проверяем, принадлежит ли URL приложению
-                    // if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                    // {
+                    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                    {
                          return Redirect(model.ReturnUrl);
-                    // }
-                    // else
-                    // {
-                    //     return LocalRedirect("~/Home/Index?handler=SetIdentity");
-                    // }
+                    }
+                    else
+                    {
+                        return LocalRedirect("~/Home/Index?handler=SetIdentity");
+                    }
                 }
                 else
                 {
@@ -72,6 +82,8 @@ namespace CarDealerCore.Controllers
             }
             return View(model);
         }
+        
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOut()
@@ -79,8 +91,10 @@ namespace CarDealerCore.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+        
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -103,6 +117,37 @@ namespace CarDealerCore.Controllers
                         ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UserPage(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = await _userManager.FindByIdAsync(model.Id);
+                if (user != null)
+                {
+                    IdentityResult result =
+                        await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(String.Empty, "Ошибка: неправильный пароль!");
             }
 
             return View(model);

@@ -1,39 +1,40 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using CarDealerCore.Data;
 using CarDealerCore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace CarDealerCore.Controllers
 {
+    [Authorize]
     public class CarController : Controller
     {
         private ApplicationContext _db;
-        private readonly ILogger<HomeController> _logger;
 
-        public CarController(ILogger<HomeController> logger, ApplicationContext context)
+        public CarController(ApplicationContext context)
         {
             _db = context;
-            _logger = logger;
         }
         // GET
+        [AllowAnonymous]
+        [HttpGet]
         public async Task<IActionResult> GetCar(int id)
         {
             return View(await _db.Cars.FindAsync(id));
         }
         
-        public IActionResult Buy()
-        {
-            return RedirectToAction("MySales", "Sale");
-        }
-
+        [HttpGet]
+        [Authorize(Policy = "Admin")]
         public IActionResult AddCar()
         {
             return View();
         }
         
         [HttpPost]
+        [Authorize(Policy = "Admin")]
         public async Task<IActionResult> AddCar(Car car)
         {
             
@@ -47,8 +48,16 @@ namespace CarDealerCore.Controllers
         }
         
         [HttpPost]
-        public IActionResult Buy(int? id)
+        [Authorize(Policy = "User")]
+        public async Task<IActionResult> Buy(int id)
         {
+            User user = await _db.Users.FirstOrDefaultAsync(x => 
+                x.UserName == User.Identity.Name);
+            await _db.Sales.AddAsync(new Sale(user.Id, id, DateTime.Now, "Выполняется"));
+            Car car = await _db.Cars.FindAsync(id);
+            car.IsSold = true;
+            _db.Cars.Update(car);
+            await _db.SaveChangesAsync();
             return RedirectToAction("MySales", "Sale");
         }
     }

@@ -1,3 +1,7 @@
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> _userManager
+@inject RoleManager<IdentityRole> _roleManager
+
 @model Car
 @{
     ViewData["Title"] = Model.Mark + " " + Model.Model;
@@ -22,9 +26,17 @@
         @*@HtmlHelper.Raw(Model.Description)*@
         @*<span>@Model.Description</span>*@
     </div>
-    <div class="row">
-        <form method="post" asp-action="Buy">
-        <button type="submit" class="btn btn-primary">Купить</button>
-        </form>
-    </div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        @if (User.IsInRole(("User")))
+        {
+            <div class="row my-5">
+                <form method="post" asp-action="Buy">
+                    <input type="hidden" asp-for="Id">
+                    <button type="submit" class="btn btn-primary">Купить</button>
+                </form>
+            </div>
+        }
+    }
+    
 </div>
