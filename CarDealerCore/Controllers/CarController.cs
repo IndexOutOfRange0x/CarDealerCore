@@ -37,14 +37,19 @@ namespace CarDealerCore.Controllers
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> AddCar(Car car)
         {
-            
-            Car c = await _db.Cars.FirstOrDefaultAsync(x => x.VIN == car.VIN);
-            if (c == null)
+            if (ModelState.IsValid)
             {
-                _db.Cars.Add(car);
-                await _db.SaveChangesAsync();
+                Car c = await _db.Cars.FirstOrDefaultAsync(x => x.VIN == car.VIN);
+                if (c == null)
+                {
+                    var result = _db.Cars.Add(car);
+                    await _db.SaveChangesAsync();
+                }
+
+                return RedirectToAction("Index", "Home");
             }
-            return RedirectToAction("Index", "Home");
+            
+            return View(car);
         }
         
         [HttpPost]

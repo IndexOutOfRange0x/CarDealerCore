@@ -8,22 +8,20 @@ namespace CarDealerCore.Models
 {
     public class Car
     {
-        
         public int Id { get; set; }
-        [Required]
-        [StringLength(17, ErrorMessage = "VIN номер должен состоять из 17 символов")]
+        [Required(ErrorMessage = "Поле \"VIN\" является обязательным")]
+        [StringLength(17, ErrorMessage = "VIN номер должен состоять из 17 символов", MinimumLength = 17)]
         public string VIN { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Поле \"Марка\" является обязательным")]
         public string Mark { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Поле \"Модель\" является обязательным")]
         public string Model { get; set; }
 
-        [Required]
         public string Description { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Поле \"Цена\" является обязательным")]
         public decimal Price { get; set; }
         public bool IsSold { get; set; }
         public virtual Sale Sale { get; set; }
